@@ -5,8 +5,8 @@ from enum import IntEnum;
 from cv2 import aruco
 
 class REALSENSE_PARA(IntEnum):
-    WIDTH = 640
-    HEIGHT = 360
+    WIDTH = 848
+    HEIGHT = 480
     RGB_FRAMERATE = 60
     DEPTH_FRAMERATE = 90
     IR_FRAMERATE = 60
@@ -41,8 +41,8 @@ class Realsense:
             [(0,0), (self.rectW,0), (self.rectW, self.rectH), (0,self.rectH)])   # 長方形座標
 
         self.M = np.zeros((3, 3), np.uint8)
-        self.frameW = 640
-        self.frameH = 360
+        self.frameW = 848
+        self.frameH = 480
         # 一つ前の有効画像の初期値　画像取得できなかったときに使う
         self.last_frame = np.zeros((self.frameH, self.frameW, 3), np.uint8)
         self.last_rect = np.zeros((self.rectH, self.rectW, 3), np.uint8)

@@ -64,8 +64,8 @@ class IRTracker:
         current_dir=os.path.dirname(__file__)
         self.m_depth=np.load(os.path.abspath(os.path.join(current_dir,os.pardir,os.pardir,os.pardir,os.pardir,'share','ir_tracking_pub','pts1.npy')))
         self.realsense = Realsense()
-        self.width = 885 # 変形後画像サイズ 177 133.5 フィールド比率1.325
-        self.height = 668
+        self.width = 960 # 変形後画像サイズ
+        self.height = 540
         self.true_coordinates   = np.float32([[0,0],[self.width,0],[self.width,self.height],[0,self.height]])
         self.frame_ir_pre = self.realsense.get_ir_frame()
         self.x = 0
