@@ -33,26 +33,25 @@ class Realsense:
         self.align_to = rs.stream.color
         self.align = rs.align(self.align_to)
 
-         # マーカー四角形の指定
-        self.preset_ids = [0, 1, 2, 3]              # 現実世界で貼るマーカーのid
-        self.preset_corner_ids = [2, 3, 0, 1]       # 各マーカーのどの頂点の座標を取得するか
-        self.rectW, self.rectH = 600, 360           # 長方形のサイズ
-        self.pts2 = np.float32(
-            [(0,0), (self.rectW,0), (self.rectW, self.rectH), (0,self.rectH)])   # 長方形座標
 
-        self.M = np.zeros((3, 3), np.uint8)
-        self.frameW = 848
-        self.frameH = 480
+        # マーカー四角形の指定
+        # self.preset_ids = [0, 1, 2, 3]              # 現実世界で貼るマーカーのid
+        # self.preset_corner_ids = [2, 3, 0, 1]       # 各マーカーのどの頂点の座標を取得するか
+        # self.rectW, self.rectH = 600, 360           # 長方形のサイズ
+        # self.pts2 = np.float32(
+        #     [(0,0), (self.rectW,0), (self.rectW, self.rectH), (0,self.rectH)])   # 長方形座標
+
+        # self.M = np.zeros((3, 3), np.uint8)
+        self.frameW = REALSENSE_PARA.WIDTH
+        self.frameH = REALSENSE_PARA.HEIGHT
+
         # 一つ前の有効画像の初期値　画像取得できなかったときに使う
         self.last_frame = np.zeros((self.frameH, self.frameW, 3), np.uint8)
-        self.last_rect = np.zeros((self.rectH, self.rectW, 3), np.uint8)
-        self.dic_aruco = aruco.getPredefinedDictionary(aruco.DICT_4X4_50)
+        # self.last_rect = np.zeros((self.rectH, self.rectW, 3), np.uint8)
+        # self.dic_aruco = aruco.getPredefinedDictionary(aruco.DICT_4X4_50)
 
     #rgbフレームの獲得
     def get_rgb_frame(self):
-        
-        # self.M = np.load("transformation_matrix.npy")
-
         frames = self.pipeline.wait_for_frames()
 
         aligned_frames = self.align.process(frames)
@@ -63,43 +62,19 @@ class Realsense:
 
         #imageをnumpy arrayに
         color_image = np.asanyarray(color_frame.get_data())
-        #color_image = cv2.warpPerspective(color_image,self.M,(self.rectW,self.rectH))
+
         #画像リサイズ
         #color_image_s = cv2.resize(color_image, (640, 360))
 
         return color_image
     
-    #depthフレームの獲得
-    """def get_depth_frame(self):
-
-        frames = self.pipeline.wait_for_frames()
-
-        aligned_frames = self.align.process(frames)
-        depth_frame = aligned_frames.get_depth_frame()
-        if not depth_frame:
-            print("can't get depth frame")
-            return
-
-        #imageをnumpy arrayに
-        depth_image = np.asanyarray(depth_frame.get_data())
-
-        #画像リサイズ
-        #depth_image_s = cv2.resize(depth_image, (640, 360))
-
-        depth_image = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=0.08), cv2.COLORMAP_JET)
-
-        return depth_image"""
     
     #irフレームの獲得
     def get_ir_frame(self):
-
-        # self.M = np.load("transformation_matrix.npy")
-
         frames = self.pipeline.wait_for_frames()
         aligned_frames = self.align.process(frames)
         ir_frame = aligned_frames.get_infrared_frame(1)
 
-        
         if not ir_frame:
             print("can't get ir frame")
             return
@@ -107,12 +82,6 @@ class Realsense:
         #imageをnumpy arrayに
         ir_image = np.asanyarray(ir_frame.get_data())
 
-        #ir_rect = cv2.warpPerspective(ir_image,self.M,(self.rectW,self.rectH))
         #画像リサイズ
         #depth_image_s = cv2.resize(depth_image, (640, 360))
-
-        #convertScaleAbsでコントラストを調整
-        #applyColorMapでカラーマップを適用
-        #ir_image = cv2.applyColorMap(cv2.convertScaleAbs(ir_image, alpha=0.3),cv2.COLORMAP_MAGMA)
-
         return ir_image
