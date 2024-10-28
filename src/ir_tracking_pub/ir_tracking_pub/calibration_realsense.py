@@ -5,7 +5,7 @@ import pyrealsense2 as rs
 from enum import IntEnum;
 
 class REALSENSE_PARA(IntEnum):
-    WIDTH = 848 # カメラの入力画像の幅
+    WIDTH = 640 # カメラの入力画像の幅
     HEIGHT = 480 # カメラの入力画像の高さ
     RGB_FRAMERATE = 60
     DEPTH_FRAMERATE = 90
@@ -39,6 +39,8 @@ class Camera():
         # 一つ前の有効画像の初期値　画像取得できなかったときに使う
         self.last_frame = np.zeros((self.frameH, self.frameW, 3), np.uint8)
         self.dic_aruco = aruco.getPredefinedDictionary(aruco.DICT_4X4_50)
+
+        self.end = False
 
 
     def get_rgb_frame(self):
@@ -76,6 +78,7 @@ class Camera():
             pts1 = np.float32(pts)                      # 投影変換する前の四角形
 
             np.save("pts1.npy", pts1)                   # 4点の座標をバイナリ保存
+            end = True
             print(pts1)
 
         self.image1 = image1
@@ -89,6 +92,8 @@ def main():
         camera.get_rect()
         camera.show()
 
+        if camera.end==True:
+            break
         key = cv2.waitKey(1) & 0xFF
         if key == 27:                   # esc key
             break

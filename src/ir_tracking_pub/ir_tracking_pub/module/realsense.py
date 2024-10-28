@@ -5,17 +5,18 @@ from enum import IntEnum;
 from cv2 import aruco
 
 class REALSENSE_PARA(IntEnum):
-    WIDTH = 848
+    # カメラの画素数変えるならここだけ変えればいい
+    WIDTH = 640
     HEIGHT = 480
     RGB_FRAMERATE = 60
     DEPTH_FRAMERATE = 90
-    IR_FRAMERATE = 60
+    IR_FRAMERATE = 90
     
 class Realsense:
     def __init__(self):
          # ストリーム(Depth/Color)の設定 (今回depthは使わない)
         self.config = rs.config()
-        self.config.enable_stream(rs.stream.color, REALSENSE_PARA.WIDTH, REALSENSE_PARA.HEIGHT, rs.format.bgr8, REALSENSE_PARA.RGB_FRAMERATE)
+        # self.config.enable_stream(rs.stream.color, REALSENSE_PARA.WIDTH, REALSENSE_PARA.HEIGHT, rs.format.bgr8, REALSENSE_PARA.RGB_FRAMERATE)
         #self.config.enable_stream(rs.stream.depth, REALSENSE_PARA.WIDTH, REALSENSE_PARA.HEIGHT, rs.format.z16, REALSENSE_PARA.DEPTH_FRAMERATE)
 
         #irでのストリームの設定(カメラ2つあるので片方だけ使う)
@@ -29,7 +30,7 @@ class Realsense:
         depth_sensor = device.query_sensors()[0]
         emitter = depth_sensor.set_option(rs.option.emitter_enabled,0)
         depth_sensor.set_option(rs.option.enable_auto_exposure, 0)
-        depth_sensor.set_option(rs.option.exposure, 500)
+        depth_sensor.set_option(rs.option.exposure, 800)
         self.align_to = rs.stream.color
         self.align = rs.align(self.align_to)
 
