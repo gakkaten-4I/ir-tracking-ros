@@ -62,7 +62,7 @@ def blackToColor(bImage):
 class IRTracker:
     def __init__(self):
         current_dir=os.path.dirname(__file__)
-        self.m_depth=np.load(os.path.abspath(os.path.join(current_dir,os.pardir,os.pardir,os.pardir,os.pardir,'share','ir_tracking_pub','pts1.npy')))
+        self.m_depth=np.load(os.path.abspath(os.path.join(current_dir,os.pardir,os.pardir,os.pardir,os.pardir,'ir_tracking_pub','share','ir_tracking_pub','pts1.npy')))
         self.realsense = Realsense()
         self.width = 960 # 変形後画像サイズ
         self.height = 540
