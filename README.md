@@ -16,3 +16,7 @@ ir-tracking-ros直下で
 colcon build --packages-select ir_tracking_pub
 ros2 run ir_tracking_pub talker
 ```
+キャリブレーションファイルpts1.npyの作成方法（pts1.npyをdepth_tracking_ir.pyと同じ場所に置く）
+```
+python calibration_realsense.py
+```

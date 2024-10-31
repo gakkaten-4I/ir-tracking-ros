@@ -3,6 +3,8 @@ from cv2 import aruco
 import numpy as np
 import pyrealsense2 as rs
 from enum import IntEnum;
+import os
+import sys
 
 class REALSENSE_PARA(IntEnum):
     WIDTH = 640 # カメラの入力画像の幅
@@ -40,7 +42,6 @@ class Camera():
         self.last_frame = np.zeros((self.frameH, self.frameW, 3), np.uint8)
         self.dic_aruco = aruco.getPredefinedDictionary(aruco.DICT_4X4_50)
 
-        self.end = False
 
 
     def get_rgb_frame(self):
@@ -76,10 +77,13 @@ class Camera():
             for id, corner_id in zip(self.preset_ids, self.preset_corner_ids):
                 pts.append(pt[id][corner_id])           # 特定の頂点の座標を順にリストに追加する
             pts1 = np.float32(pts)                      # 投影変換する前の四角形
+            
+            script_dir = os.path.dirname(os.path.abspath(__file__))
+            np.save(os.path.join(script_dir, "pts1.npy"), pts1)  # 4点の座標をバイナリ保存
 
-            np.save("pts1.npy", pts1)                   # 4点の座標をバイナリ保存
-            end = True
             print(pts1)
+            sys.exit()
+            
 
         self.image1 = image1
     
@@ -92,8 +96,6 @@ def main():
         camera.get_rect()
         camera.show()
 
-        if camera.end==True:
-            break
         key = cv2.waitKey(1) & 0xFF
         if key == 27:                   # esc key
             break
